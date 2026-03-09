@@ -1,3 +1,6 @@
 [submodule ".kilocode/glm5-instructions"]
 	path = .kilocode/glm5-instructions
 	url = https://github.com/Adrixan/kilo-glm5-instructions.git
+[submodule ".github/copilot-instructions"]
+	path = .github/copilot-instructions
+	url = https://github.com/Adrixan/copilot-instructions.git
