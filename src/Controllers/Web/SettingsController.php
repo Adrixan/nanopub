@@ -18,7 +18,7 @@ use NanoPub\Exceptions\ValidationException;
  */
 final class SettingsController
 {
-    private AuthService $authService;
+    private AuthService $authService; // @phpstan-ignore property.onlyWritten
 
     private MediaService $mediaService;
 

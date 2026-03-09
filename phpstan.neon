@@ -1,0 +1,24 @@
+parameters:
+    level: 5
+    paths:
+        - src/
+    stubFiles:
+        - phpstan-stubs/http_request.php
+    ignoreErrors:
+        # Our http_request() function in src/Helpers/http.php collides with PECL pecl_http's
+        # http_request() which has a completely different signature. PHPStan's bundled JetBrains
+        # stubs define the PECL version and cannot be overridden by user stubs.
+        -
+            message: '#Parameter .+ of function http_request expects#'
+            paths:
+                - src/Helpers/http.php
+        -
+            message: '#Function http_\w+\(\) should return array\{.+\} but returns string#'
+            paths:
+                - src/Helpers/http.php
+        -
+            message: "#Offset '.+' does not exist on string#"
+            paths:
+                - src/Middleware/SignatureMiddleware.php
+                - src/Services/ActivityPubService.php
+                - src/Services/SearchService.php

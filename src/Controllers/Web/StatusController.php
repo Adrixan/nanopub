@@ -23,7 +23,7 @@ use NanoPub\Exceptions\NotFoundException;
  */
 final class StatusController
 {
-    private ActivityPubService $activityPubService;
+    private ActivityPubService $activityPubService; // @phpstan-ignore property.onlyWritten
 
     private NotificationService $notificationService;
 
