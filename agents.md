@@ -4,10 +4,9 @@ This file configures GLM-5 behavior for this project. Place in project root.
 
 ## Project Context
 
-<!-- Describe your project here -->
-- **Type**: Web Application / API / CLI / Library
-- **Stack**: <!-- e.g., Python/FastAPI, Node/Express, Java/Spring -->
-- **Deployment**: <!-- e.g., Docker, Kubernetes, Serverless -->
+- **Type**: Web Application / API / Federated Social Network (ActivityPub)
+- **Stack**: PHP 8.1+ with custom micro-MVC framework
+- **Deployment**: Apache (shared hosting)
 
 ## Coding Standards
 
@@ -15,28 +14,13 @@ This file configures GLM-5 behavior for this project. Place in project root.
 
 <!-- Uncomment and fill in as needed -->
 
-<!--
-#### Python
-- Version: 3.12+
-- Linter: Ruff
-- Type hints: mandatory
-- Testing: pytest
-
-#### TypeScript
-- Version: 5.6+
-- Strict mode: enabled
-- Testing: Vitest
-
-#### Java
-- Version: 21 LTS
-- Framework: Spring Boot 3.3+
-- Testing: JUnit 5 + AssertJ
-
 #### PHP
-- Version: 8.3+
-- Framework: Laravel 11 / Symfony 7
-- Strict types: `declare(strict_types=1);`
--->
+
+- Version: 8.1+
+- Framework: Custom micro-MVC (no external framework)
+- Strict types: `declare(strict_types=1);` required on all PHP files
+- No Composer dependencies at runtime (dev dependencies only for tooling)
+- Memory constraint: 128MB maximum
 
 ### General
 
@@ -49,16 +33,24 @@ This file configures GLM-5 behavior for this project. Place in project root.
 
 ```
 src/
-├── api/           # API endpoints/routes
-├── services/      # Business logic
-├── models/        # Data models/entities
-├── repositories/  # Data access
-└── utils/         # Shared utilities
+├── Controllers/
+│   ├── Web/              # Web UI controllers
+│   ├── Api/
+│   │   ├── v1/          # REST API v1
+│   │   └── v2/          # REST API v2
+│   └── ActivityPub/    # ActivityPub endpoints (inbox, outbox, actor, webfinger)
+├── Services/            # Business logic services
+├── Models/              # Data models (Account, Status, Follow, etc.)
+├── Middleware/         # Request middleware (Auth, CORS, RateLimit, Signature)
+├── Core/               # Framework core (Router, Database, Session, View, Request, Response)
+├── Helpers/            # Utility functions (crypto, http, json, text, time, validation)
+├── Views/              # HTML templates
+└── Exceptions/        # Custom exceptions
 
-tests/
-├── unit/          # Fast, isolated tests
-├── integration/   # Database/external services
-└── e2e/           # End-to-end flows
+config/                 # Configuration files
+public/                 # Public web root (index.php, assets)
+cron/                   # Cron jobs (cleanup, federation, queue worker)
+database/              # Database schema
 ```
 
 ## Security Rules
@@ -74,15 +66,24 @@ credentials.json
 *.pem
 *.key
 secrets.*
+config/instance.php
 ```
 
 ### Required Checks
 
-- [ ] All inputs validated before processing
-- [ ] Parameterized queries for all database operations
-- [ ] No hardcoded secrets
-- [ ] Dependencies scanned for CVEs
-- [ ] Error messages sanitized for users
+- [x] All inputs validated before processing
+- [x] Parameterized queries for all database operations
+- [x] No hardcoded secrets
+- [x] Dependencies scanned for CVEs
+- [x] Error messages sanitized for users
+
+### NanoPub Security Features
+
+- **HTTP Signatures**: ActivityPub requests signed with Ed25519/RS256
+- **Rate Limiting**: Per-IP and per-account rate limits
+- **CSRF Protection**: Token-based CSRF protection for state-changing operations
+- **Password Hashing**: bcrypt with cost factor 12
+- **Input Validation**: Strict validation via `src/Helpers/validation.php`
 
 ## Testing Requirements
 
@@ -98,27 +99,49 @@ secrets.*
 
 ## Deployment
 
-<!-- Customize for your deployment target -->
+### Apache (Shared Hosting)
 
-### Docker
+- **PHP Version**: 8.1+ required
+- **Mod Rewrite**: `.htaccess` for URL routing
+- **Document Root**: `public/` directory
+- **Memory Limit**: 128M (enforced in `.htaccess`)
+- **Upload Size**: 50M max (configurable)
 
-- Base image: Use specific version tags (not `:latest`)
-- User: Non-root (e.g., `USER app`)
-- Health check: Required
+### Cron Jobs
 
-### Kubernetes
-
-- Resource limits: Required for all containers
-- Readiness/liveness probes: Required
-- Secrets: From Kubernetes Secrets or External Secrets Operator
+- `cron/federation.php`: Outbox delivery and inbox fetching
+- `cron/cleanup.php`: Database maintenance and old data purging
+- `cron/queue-worker.php`: Process queued activities
 
 ## Project-Specific Rules
 
-<!-- Add custom rules below -->
+### Memory Optimization
 
-1.
-2.
-3.
+1. **128MB Memory Limit**: All code must operate within 128MB memory constraint
+2. **Streaming/Lazy Loading**: Use generators and cursor-based pagination for large datasets
+3. **No In-Memory Caching**: Use database tables as cache (no Redis/Memcached)
+4. **Efficient Queries**: Always use indexed columns, avoid N+1 queries with eager loading
+5. **Image Processing**: Resize/compress images in chunks, never load full size into memory
+
+### No External Runtime Dependencies
+
+1. **Standalone**: No Composer packages required at runtime
+2. **Native PHP**: Use native PHP functions (PDO, JSON, hashing) instead of libraries
+3. **Self-Contained**: All utilities in `src/Helpers/` must be implemented without external packages
+
+### ActivityPub Federation
+
+1. **Outbox Paging**: Implement `first`/`next` links for collection pagination
+2. **Inbox Handling**: Process activities asynchronously via queue
+3. **HTTP Signatures**: Verify `Signature` header on all incoming requests
+4. **Content Delivery**: Use `deliveryQueue` table for reliable federation
+
+### Database Patterns
+
+1. **Parameterized Queries**: Always use prepared statements (no string interpolation)
+2. **Transactions**: Wrap multi-step mutations in transactions
+3. **Queue Tables**: Use `activityQueue` and `deliveryQueue` tables for async processing
+4. **File Storage**: Store uploads outside webroot in `storage/uploads/`
 
 ---
 
