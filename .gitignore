@@ -1,0 +1,40 @@
+# Dependencies
+/vendor/
+/node_modules/
+
+# Environment files (contains secrets)
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+/logs/
+
+# Uploads and cache
+/public/storage/uploads/*
+/storage/uploads/*
+!/public/storage/uploads/.gitkeep
+!/storage/uploads/.gitkeep
+
+# Queue jobs
+/public/storage/queue/*
+/storage/queue/*
+!/public/storage/queue/.gitkeep
+!/storage/queue/.gitkeep
+
+# PHPUnit
+.phpunit.cache/
+
+# Build artifacts
+nanopub-dev-*.tar.gz

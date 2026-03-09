@@ -1,0 +1,5 @@
+# NanoPub Storage - Deny all web access
+# This directory contains sensitive user uploads and queue data
+
+Order allow,deny
+Deny from all

@@ -1,0 +1,10 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Placeholder for Integration tests.
+ * 
+ * Integration tests require database and other external dependencies.
+ * These tests will be implemented as the project matures.
+ */
