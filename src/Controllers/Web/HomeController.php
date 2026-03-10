@@ -94,7 +94,7 @@ final class HomeController
         }
 
         try {
-            $statuses = Status::getHomeTimeline((int) $accountId, 20);
+            $statuses = iterator_to_array(Status::getHomeTimeline((int) $accountId, 20));
         } catch (RuntimeException $e) {
             return $this->showTimelineError('Unable to load your timeline. The database may be temporarily unavailable.');
         }
@@ -125,7 +125,7 @@ final class HomeController
     public function publicTimeline(Request $request): string
     {
         try {
-            $statuses = Status::getPublicTimeline(20);
+            $statuses = iterator_to_array(Status::getPublicTimeline(20));
         } catch (RuntimeException $e) {
             return View::render('error/500', [
                 'message' => 'Unable to load the public timeline. The database may be temporarily unavailable.',

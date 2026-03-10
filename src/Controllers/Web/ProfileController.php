@@ -31,7 +31,7 @@ final class ProfileController
             throw new NotFoundException('Account not found');
         }
 
-        $statuses = Status::getAccountStatuses((int) $account['id'], 20);
+        $statuses = iterator_to_array(Status::getAccountStatuses((int) $account['id'], 20));
         $currentAccount = $this->getCurrentAccount();
         $relationship = $currentAccount !== null
             ? Follow::getRelationship((int) $currentAccount['id'], (int) $account['id'])
@@ -61,7 +61,7 @@ final class ProfileController
         $limit = min((int) ($request->query['limit'] ?? 40), 80);
         $offset = (int) ($request->query['offset'] ?? 0);
 
-        $followers = Follow::getFollowers((int) $account['id'], $limit, $offset);
+        $followers = iterator_to_array(Follow::getFollowers((int) $account['id'], $limit, $offset));
         $currentAccount = $this->getCurrentAccount();
 
         echo View::render('web/profiles/followers', [
@@ -87,7 +87,7 @@ final class ProfileController
         $limit = min((int) ($request->query['limit'] ?? 40), 80);
         $offset = (int) ($request->query['offset'] ?? 0);
 
-        $following = Follow::getFollowing((int) $account['id'], $limit, $offset);
+        $following = iterator_to_array(Follow::getFollowing((int) $account['id'], $limit, $offset));
         $currentAccount = $this->getCurrentAccount();
 
         echo View::render('web/profiles/following', [
