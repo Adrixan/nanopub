@@ -38,11 +38,10 @@ if (!isset($account) || empty($account) || !is_array($account)) { // @phpstan-ig
         </header>
         
         <section class="compose-section" aria-label="Compose new status">
-            <form action="<?= url('/api/v1/statuses') ?>" 
+            <form action="<?= url('/statuses') ?>" 
                   method="post" 
                   class="compose-form"
-                  enctype="multipart/form-data"
-                  data-csrf="<?= e($csrf ?? '') ?>">
+                  enctype="multipart/form-data">
                 
                 <div class="compose-author">
                     <img 

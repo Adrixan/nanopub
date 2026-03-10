@@ -33,6 +33,10 @@ $routes = [
         '/@{username}/followers' => [\NanoPub\Controllers\Web\ProfileController::class, 'followers'],
         '/@{username}/following' => [\NanoPub\Controllers\Web\ProfileController::class, 'following'],
         
+        // Notifications & Bookmarks
+        '/notifications' => [\NanoPub\Controllers\Web\NotificationController::class, 'index'],
+        '/bookmarks' => [\NanoPub\Controllers\Web\BookmarkController::class, 'index'],
+        
         // Settings
         '/settings' => [\NanoPub\Controllers\Web\SettingsController::class, 'index'],
         '/settings/profile' => [\NanoPub\Controllers\Web\SettingsController::class, 'profile'],
