@@ -55,12 +55,14 @@ class Follow
     public static function getRelationship(int $accountId, int $targetAccountId): array
     {
         $sql = "SELECT 
-                    (SELECT COUNT(*) FROM follows WHERE account_id = :account_id AND target_account_id = :target_id) as following,
-                    (SELECT COUNT(*) FROM follows WHERE account_id = :target_id AND target_account_id = :account_id) as followed_by";
+                    (SELECT COUNT(*) FROM follows WHERE account_id = :acct1 AND target_account_id = :tgt1) as following,
+                    (SELECT COUNT(*) FROM follows WHERE account_id = :tgt2 AND target_account_id = :acct2) as followed_by";
         
         $result = Database::fetchOne($sql, [
-            'account_id' => $accountId,
-            'target_id' => $targetAccountId,
+            'acct1' => $accountId,
+            'tgt1' => $targetAccountId,
+            'tgt2' => $targetAccountId,
+            'acct2' => $accountId,
         ]);
 
         return [

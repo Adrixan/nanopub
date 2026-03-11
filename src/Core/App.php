@@ -171,12 +171,15 @@ final class App
     {
         if ($result instanceof Response) {
             $result->send();
-        } elseif (is_string($result)) {
+        } elseif (is_string($result) && $result !== '') {
             Response::html($result);
         } elseif (is_array($result)) {
             Response::json($result);
-        } elseif ($result === null) {
-            Response::noContent();
+        } elseif ($result === null || $result === '') {
+            // void/empty return — controller already handled response (e.g. redirect)
+            if (!headers_sent()) {
+                Response::noContent();
+            }
         } else {
             throw new RuntimeException('Invalid controller response type');
         }

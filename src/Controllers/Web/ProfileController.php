@@ -102,13 +102,13 @@ final class ProfileController
      * 
      * POST /@{username}/follow
      */
-    public function follow(Request $request, string $username): void
+    public function follow(Request $request, string $username): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $targetAccount = Account::findByUsername($username);
@@ -120,7 +120,7 @@ final class ProfileController
         // Cannot follow yourself
         if ((int) $targetAccount['id'] === (int) $accountId) {
             Response::redirect(url('/@' . $username));
-            return;
+            return '';
         }
 
         try {
@@ -132,6 +132,7 @@ final class ProfileController
         }
 
         Response::redirect(url('/@' . $username));
+        return '';
     }
 
     /**
@@ -139,13 +140,13 @@ final class ProfileController
      * 
      * POST /@{username}/unfollow
      */
-    public function unfollow(Request $request, string $username): void
+    public function unfollow(Request $request, string $username): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $targetAccount = Account::findByUsername($username);
@@ -161,6 +162,7 @@ final class ProfileController
         }
 
         Response::redirect(url('/@' . $username));
+        return '';
     }
 
     /**

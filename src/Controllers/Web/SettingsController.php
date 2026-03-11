@@ -9,6 +9,7 @@ use NanoPub\Core\Response;
 use NanoPub\Core\View;
 use NanoPub\Core\Session;
 use NanoPub\Models\Account;
+use NanoPub\Core\Database;
 use NanoPub\Services\AuthService;
 use NanoPub\Services\MediaService;
 use NanoPub\Exceptions\ValidationException;
@@ -223,9 +224,10 @@ final class SettingsController
      * 
      * GET /settings/profile
      */
-    public function profile(Request $request): void
+    public function profile(Request $request): string
     {
         Response::redirect(url('/settings'));
+        return '';
     }
 
     /**
@@ -378,13 +380,13 @@ final class SettingsController
      * 
      * POST /settings/privacy
      */
-    public function updatePrivacy(Request $request): void
+    public function updatePrivacy(Request $request): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $data = $request->json();
@@ -405,6 +407,35 @@ final class SettingsController
         }
 
         Response::redirect(url('/settings/privacy'));
+        return '';
+    }
+
+    /**
+     * Update preferences.
+     * 
+     * POST /settings/preferences
+     */
+    public function updatePreferences(Request $request): string
+    {
+        $accountId = Session::get('account_id');
+
+        if ($accountId === null) {
+            Response::redirect(url('/login'));
+            return '';
+        }
+
+        $input = $_POST;
+
+        $locked = isset($input['locked']);
+        $discoverable = isset($input['discoverable']);
+
+        Database::execute(
+            'UPDATE accounts SET locked = ?, discoverable = ? WHERE id = ?',
+            [$locked ? 1 : 0, $discoverable ? 1 : 0, $accountId]
+        );
+
+        Response::redirect(url('/settings'));
+        return '';
     }
 
     /**
@@ -412,13 +443,13 @@ final class SettingsController
      * 
      * POST /settings/notifications
      */
-    public function updateNotifications(Request $request): void
+    public function updateNotifications(Request $request): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $data = $request->json();
@@ -447,5 +478,6 @@ final class SettingsController
         }
 
         Response::redirect(url('/settings/notifications'));
+        return '';
     }
 }

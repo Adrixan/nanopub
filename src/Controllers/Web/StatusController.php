@@ -68,13 +68,13 @@ final class StatusController
      * 
      * POST /statuses
      */
-    public function create(Request $request): void
+    public function create(Request $request): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $data = $request->json();
@@ -88,7 +88,7 @@ final class StatusController
 
         if (empty($content)) {
             Response::redirect(url('/?error=empty'));
-            return;
+            return '';
         }
 
         $baseUrl = Config::get('app.url') ?? '';
@@ -96,7 +96,7 @@ final class StatusController
         
         if ($account === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         // Create status (URI/URL set after insert to get the actual ID)
@@ -141,6 +141,7 @@ final class StatusController
         }
 
         Response::redirect(url('/'));
+        return '';
     }
 
     /**
@@ -148,13 +149,13 @@ final class StatusController
      * 
      * DELETE /statuses/{id}
      */
-    public function delete(Request $request, int $id): void
+    public function delete(Request $request, int $id): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::json(['error' => 'Unauthorized'], 401);
-            return;
+            return '';
         }
 
         $status = Status::find($id);
@@ -165,7 +166,7 @@ final class StatusController
 
         if ((int) $status['account_id'] !== (int) $accountId) {
             Response::json(['error' => 'Forbidden'], 403);
-            return;
+            return '';
         }
 
         Status::delete($id);
@@ -174,6 +175,7 @@ final class StatusController
         // The ActivityPubService will handle Delete activity for federation
 
         Response::redirect(url('/'));
+        return '';
     }
 
     /**
@@ -181,13 +183,13 @@ final class StatusController
      * 
      * POST /statuses/{id}/favourite
      */
-    public function favourite(Request $request, int $id): void
+    public function favourite(Request $request, int $id): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $status = Status::find($id);
@@ -214,6 +216,7 @@ final class StatusController
         }
 
         $this->redirectBack($status);
+        return '';
     }
 
     /**
@@ -221,13 +224,13 @@ final class StatusController
      * 
      * POST /statuses/{id}/unfavourite
      */
-    public function unfavourite(Request $request, int $id): void
+    public function unfavourite(Request $request, int $id): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $status = Status::find($id);
@@ -243,6 +246,7 @@ final class StatusController
         }
 
         $this->redirectBack($status);
+        return '';
     }
 
     /**
@@ -250,13 +254,13 @@ final class StatusController
      * 
      * POST /statuses/{id}/reblog
      */
-    public function reblog(Request $request, int $id): void
+    public function reblog(Request $request, int $id): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $status = Status::find($id);
@@ -283,6 +287,7 @@ final class StatusController
         }
 
         $this->redirectBack($status);
+        return '';
     }
 
     /**
@@ -290,13 +295,13 @@ final class StatusController
      * 
      * POST /statuses/{id}/unreblog
      */
-    public function unreblog(Request $request, int $id): void
+    public function unreblog(Request $request, int $id): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $status = Status::find($id);
@@ -312,6 +317,7 @@ final class StatusController
         }
 
         $this->redirectBack($status);
+        return '';
     }
 
     /**

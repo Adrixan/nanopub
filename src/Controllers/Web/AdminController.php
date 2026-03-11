@@ -93,7 +93,7 @@ final class AdminController
      * 
      * POST /admin/settings
      */
-    public function updateSettings(Request $request): void
+    public function updateSettings(Request $request): string
     {
         $this->requireAdmin();
 
@@ -119,6 +119,7 @@ final class AdminController
         }
 
         Response::redirect(url('/admin/settings'));
+        return '';
     }
 
     /**
@@ -126,7 +127,7 @@ final class AdminController
      * 
      * POST /admin/reports/{id}/resolve
      */
-    public function resolveReport(Request $request, int $id): void
+    public function resolveReport(Request $request, int $id): string
     {
         $this->requireAdmin();
 
@@ -134,12 +135,13 @@ final class AdminController
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         Report::resolve($id, (int) $accountId);
 
         Response::redirect(url('/admin/reports'));
+        return '';
     }
 
     /**
@@ -147,7 +149,7 @@ final class AdminController
      * 
      * POST /admin/domain_blocks
      */
-    public function createDomainBlock(Request $request): void
+    public function createDomainBlock(Request $request): string
     {
         $this->requireAdmin();
 
@@ -160,12 +162,13 @@ final class AdminController
 
         if (empty($domain)) {
             Response::redirect(url('/admin/domain_blocks?error=empty'));
-            return;
+            return '';
         }
 
         DomainBlock::create($domain, $severity, $reason);
 
         Response::redirect(url('/admin/domain_blocks'));
+        return '';
     }
 
     /**
@@ -173,13 +176,14 @@ final class AdminController
      * 
      * DELETE /admin/domain_blocks/{id}
      */
-    public function deleteDomainBlock(Request $request, int $id): void
+    public function deleteDomainBlock(Request $request, int $id): string
     {
         $this->requireAdmin();
 
         DomainBlock::delete($id);
 
         Response::redirect(url('/admin/domain_blocks'));
+        return '';
     }
 
     /**
@@ -236,7 +240,7 @@ final class AdminController
      * 
      * POST /admin/users/{id}/action
      */
-    public function userAction(Request $request, int $id): void
+    public function userAction(Request $request, int $id): string
     {
         $this->requireAdmin();
 
@@ -248,7 +252,7 @@ final class AdminController
 
         if ($account === null) {
             Response::redirect(url('/admin/users?error=not_found'));
-            return;
+            return '';
         }
 
         try {
@@ -259,10 +263,11 @@ final class AdminController
             }
         } catch (\RuntimeException $e) {
             Response::redirect(url('/admin/users?error=action_failed'));
-            return;
+            return '';
         }
 
         Response::redirect(url('/admin/users'));
+        return '';
     }
 
     /**
@@ -270,7 +275,7 @@ final class AdminController
      * 
      * POST /admin/instances/{id}/action
      */
-    public function instanceAction(Request $request, int $id): void
+    public function instanceAction(Request $request, int $id): string
     {
         $this->requireAdmin();
 
@@ -292,10 +297,11 @@ final class AdminController
             }
         } catch (\RuntimeException $e) {
             Response::redirect(url('/admin/instances?error=action_failed'));
-            return;
+            return '';
         }
 
         Response::redirect(url('/admin/instances'));
+        return '';
     }
 
     /**
