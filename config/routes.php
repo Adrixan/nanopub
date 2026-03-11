@@ -72,6 +72,8 @@ $routes = [
         // Settings
         '/settings/profile' => [\NanoPub\Controllers\Web\SettingsController::class, 'updateProfile'],
         '/settings/account' => [\NanoPub\Controllers\Web\SettingsController::class, 'updateAccount'],
+        '/settings/password' => [\NanoPub\Controllers\Web\SettingsController::class, 'updatePassword'],
+        '/settings/preferences' => [\NanoPub\Controllers\Web\SettingsController::class, 'updatePreferences'],
         
         // Admin
         '/admin/users/{id}/action' => [\NanoPub\Controllers\Web\AdminController::class, 'userAction'],

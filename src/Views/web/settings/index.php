@@ -50,11 +50,10 @@
                  aria-labelledby="profile-tab">
             <h2 class="visually-hidden">Profile Settings</h2>
             
-            <form action="<?= url('/api/v1/accounts/update_credentials') ?>" 
+            <form action="<?= url('/settings/profile') ?>" 
                   method="post" 
                   class="settings-form profile-form"
-                  enctype="multipart/form-data"
-                  data-csrf="<?= e($csrf ?? '') ?>">
+                  enctype="multipart/form-data">
                 
                 <div class="form-section">
                     <h3 class="form-section-title">Display Name & Bio</h3>
@@ -127,24 +126,42 @@
                 
                 <div class="form-section">
                     <h3 class="form-section-title">Profile Fields</h3>
-                    <p class="form-section-description">Add up to 4 custom fields to your profile.</p>
+                    <p class="form-section-description">Add up to 4 fields to your profile.</p>
                     
                     <div class="profile-fields-list">
                         <?php 
                         $fields = $account['fields'] ?? [];
+                        $fieldLabels = [
+                            '' => '— Select —',
+                            'Website' => 'Website',
+                            'Blog' => 'Blog',
+                            'GitHub' => 'GitHub',
+                            'GitLab' => 'GitLab',
+                            'Twitter' => 'Twitter / X',
+                            'Mastodon' => 'Mastodon',
+                            'Matrix' => 'Matrix',
+                            'XMPP' => 'XMPP',
+                            'Email' => 'Email',
+                            'Location' => 'Location',
+                            'Pronouns' => 'Pronouns',
+                            'Languages' => 'Languages',
+                            'Other' => 'Other',
+                        ];
                         for ($i = 0; $i < 4; $i++): 
                             $field = $fields[$i] ?? ['name' => '', 'value' => ''];
                         ?>
                             <div class="field-row">
                                 <div class="form-group">
-                                    <label for="field_name_<?= $i ?>" class="form-label visually-hidden">Field <?= $i + 1 ?> Name</label>
-                                    <input type="text" 
-                                           id="field_name_<?= $i ?>" 
-                                           name="fields[<?= $i ?>][name]" 
-                                           class="form-input"
-                                           value="<?= e($field['name'] ?? '') ?>"
-                                           placeholder="Label"
-                                           maxlength="255">
+                                    <label for="field_name_<?= $i ?>" class="form-label visually-hidden">Field <?= $i + 1 ?> Label</label>
+                                    <select id="field_name_<?= $i ?>" 
+                                            name="fields[<?= $i ?>][name]" 
+                                            class="form-select">
+                                        <?php foreach ($fieldLabels as $val => $label): ?>
+                                            <option value="<?= e($val) ?>" <?= ($field['name'] ?? '') === $val ? 'selected' : '' ?>>
+                                                <?= e($label) ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="field_value_<?= $i ?>" class="form-label visually-hidden">Field <?= $i + 1 ?> Value</label>
@@ -177,8 +194,7 @@
             
             <form action="<?= url('/settings/password') ?>" 
                   method="post" 
-                  class="settings-form password-form"
-                  data-csrf="<?= e($csrf ?? '') ?>">
+                  class="settings-form password-form">
                 
                 <div class="form-section">
                     <h3 class="form-section-title">Change Password</h3>
@@ -233,8 +249,7 @@
             
             <form action="<?= url('/settings/preferences') ?>" 
                   method="post" 
-                  class="settings-form preferences-form"
-                  data-csrf="<?= e($csrf ?? '') ?>">
+                  class="settings-form preferences-form">
                 
                 <div class="form-section">
                     <h3 class="form-section-title">Posting Defaults</h3>

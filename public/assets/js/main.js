@@ -887,6 +887,20 @@
         document.head.appendChild(style);
     }
 
+    // Mobile menu toggle
+    document.addEventListener('click', function(e) {
+        const toggle = e.target.closest('.mobile-menu-toggle');
+        if (toggle) {
+            const nav = document.querySelector('.header-nav');
+            if (nav) {
+                nav.classList.toggle('mobile-open');
+                toggle.setAttribute('aria-expanded', 
+                    toggle.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'
+                );
+            }
+        }
+    });
+
     // Run on DOM ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);

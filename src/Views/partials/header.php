@@ -1,3 +1,12 @@
+<?php
+// Ensure $currentAccount is available from session if not provided by controller
+if (!isset($currentAccount)) {
+    $sessionAccountId = \NanoPub\Core\Session::get('account_id');
+    if ($sessionAccountId !== null) {
+        $currentAccount = \NanoPub\Models\Account::find((int) $sessionAccountId);
+    }
+}
+?>
 <header class="site-header" role="banner">
     <div class="header-container">
         <a href="<?= url('/') ?>" class="logo" aria-label="NanoPub home">
