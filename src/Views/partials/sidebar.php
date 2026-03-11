@@ -32,6 +32,15 @@
                 </a>
             </li>
             <li>
+                <a href="<?= url('/explore') ?>" class="nav-link<?= isset($activeNav) && $activeNav === 'explore' ? ' active' : '' ?>">
+                    <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <span>Explore</span>
+                </a>
+            </li>
+            <li>
                 <a href="<?= url('/bookmarks') ?>" class="nav-link<?= isset($activeNav) && $activeNav === 'bookmarks' ? ' active' : '' ?>">
                     <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24">
                         <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" fill="none" stroke="currentColor" stroke-width="2"/>

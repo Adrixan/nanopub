@@ -25,14 +25,14 @@ final class AdminController
      * 
      * GET /admin
      */
-    public function index(Request $request): void
+    public function index(Request $request): string
     {
         $this->requireAdmin();
 
         $stats = Instance::getStats();
         $reports = iterator_to_array(Report::getAll(10));
 
-        echo View::render('web/admin/index', [
+        return View::renderWithLayout('web/admin/index', [
             'stats' => $stats,
             'reports' => $reports,
         ]);
@@ -43,14 +43,14 @@ final class AdminController
      * 
      * GET /admin/reports
      */
-    public function reports(Request $request): void
+    public function reports(Request $request): string
     {
         $this->requireAdmin();
 
         $limit = min((int) ($request->query['limit'] ?? 50), 100);
         $reports = iterator_to_array(Report::getAll($limit));
 
-        echo View::render('web/admin/reports', [
+        return View::renderWithLayout('web/admin/reports', [
             'reports' => $reports,
         ]);
     }
@@ -60,14 +60,14 @@ final class AdminController
      * 
      * GET /admin/domain_blocks
      */
-    public function domainBlocks(Request $request): void
+    public function domainBlocks(Request $request): string
     {
         $this->requireAdmin();
 
         $limit = min((int) ($request->query['limit'] ?? 100), 200);
         $blocks = iterator_to_array(DomainBlock::getAll($limit));
 
-        echo View::render('web/admin/domain_blocks', [
+        return View::renderWithLayout('web/admin/domain_blocks', [
             'blocks' => $blocks,
         ]);
     }
@@ -77,13 +77,13 @@ final class AdminController
      * 
      * GET /admin/settings
      */
-    public function settings(Request $request): void
+    public function settings(Request $request): string
     {
         $this->requireAdmin();
 
         $instance = Instance::get();
 
-        echo View::render('web/admin/settings', [
+        return View::renderWithLayout('web/admin/settings', [
             'instance' => $instance,
         ]);
     }
@@ -187,7 +187,7 @@ final class AdminController
      * 
      * GET /admin/users
      */
-    public function users(Request $request): void
+    public function users(Request $request): string
     {
         $this->requireAdmin();
 
@@ -195,7 +195,7 @@ final class AdminController
         $offset = (int) ($request->query['offset'] ?? 0);
         $users = iterator_to_array(Account::findAll($limit, $offset));
 
-        echo View::render('web/admin/users', [
+        return View::renderWithLayout('web/admin/users', [
             'users' => $users,
         ]);
     }
@@ -205,7 +205,7 @@ final class AdminController
      * 
      * GET /admin/instances
      */
-    public function instances(Request $request): void
+    public function instances(Request $request): string
     {
         $this->requireAdmin();
 
@@ -226,7 +226,7 @@ final class AdminController
             $instances = [];
         }
 
-        echo View::render('web/admin/instances', [
+        return View::renderWithLayout('web/admin/instances', [
             'instances' => $instances,
         ]);
     }

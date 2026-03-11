@@ -42,7 +42,7 @@ final class BookmarkController
             Bookmark::getForAccount((int) $accountId, 40)
         );
 
-        return View::render('web/bookmarks/index', [
+        return View::renderWithLayout('web/bookmarks/index', [
             'account' => $account,
             'bookmarks' => $bookmarks,
             'activeNav' => 'bookmarks',

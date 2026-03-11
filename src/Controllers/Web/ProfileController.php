@@ -23,7 +23,7 @@ final class ProfileController
      * 
      * GET /@{username}
      */
-    public function show(Request $request, string $username): void
+    public function show(Request $request, string $username): string
     {
         $account = Account::findByUsername($username);
         
@@ -37,7 +37,7 @@ final class ProfileController
             ? Follow::getRelationship((int) $currentAccount['id'], (int) $account['id'])
             : null;
 
-        echo View::render('web/profiles/show', [
+        return View::renderWithLayout('web/profiles/show', [
             'account' => $account,
             'statuses' => $statuses,
             'currentAccount' => $currentAccount,
@@ -50,7 +50,7 @@ final class ProfileController
      * 
      * GET /@{username}/followers
      */
-    public function followers(Request $request, string $username): void
+    public function followers(Request $request, string $username): string
     {
         $account = Account::findByUsername($username);
         
@@ -64,7 +64,7 @@ final class ProfileController
         $followers = iterator_to_array(Follow::getFollowers((int) $account['id'], $limit, $offset));
         $currentAccount = $this->getCurrentAccount();
 
-        echo View::render('web/profiles/followers', [
+        return View::renderWithLayout('web/profiles/followers', [
             'account' => $account,
             'followers' => $followers,
             'currentAccount' => $currentAccount,
@@ -76,7 +76,7 @@ final class ProfileController
      * 
      * GET /@{username}/following
      */
-    public function following(Request $request, string $username): void
+    public function following(Request $request, string $username): string
     {
         $account = Account::findByUsername($username);
         
@@ -90,7 +90,7 @@ final class ProfileController
         $following = iterator_to_array(Follow::getFollowing((int) $account['id'], $limit, $offset));
         $currentAccount = $this->getCurrentAccount();
 
-        echo View::render('web/profiles/following', [
+        return View::renderWithLayout('web/profiles/following', [
             'account' => $account,
             'following' => $following,
             'currentAccount' => $currentAccount,

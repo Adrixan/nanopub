@@ -33,23 +33,23 @@ final class SettingsController
      * 
      * GET /settings
      */
-    public function index(Request $request): void
+    public function index(Request $request): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $account = Account::find((int) $accountId);
         
         if ($account === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
-        echo View::render('web/settings/index', [
+        return View::renderWithLayout('web/settings/index', [
             'account' => $account,
         ]);
     }
@@ -59,13 +59,13 @@ final class SettingsController
      * 
      * POST /settings/profile
      */
-    public function updateProfile(Request $request): void
+    public function updateProfile(Request $request): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $data = $request->json();
@@ -98,11 +98,10 @@ final class SettingsController
                 $updateData['avatar_url'] = $media['url'];
             } catch (ValidationException $e) {
                 $account = Account::find((int) $accountId);
-                echo View::render('web/settings/index', [
+                return View::renderWithLayout('web/settings/index', [
                     'account' => $account,
                     'error' => $e->getMessage(),
                 ]);
-                return;
             }
         }
 
@@ -116,11 +115,10 @@ final class SettingsController
                 $updateData['header_url'] = $media['url'];
             } catch (ValidationException $e) {
                 $account = Account::find((int) $accountId);
-                echo View::render('web/settings/index', [
+                return View::renderWithLayout('web/settings/index', [
                     'account' => $account,
                     'error' => $e->getMessage(),
                 ]);
-                return;
             }
         }
 
@@ -130,6 +128,7 @@ final class SettingsController
         }
 
         Response::redirect(url('/settings'));
+        return '';
     }
 
     /**
@@ -137,13 +136,13 @@ final class SettingsController
      * 
      * POST /settings/password
      */
-    public function updatePassword(Request $request): void
+    public function updatePassword(Request $request): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $data = $request->json();
@@ -157,34 +156,31 @@ final class SettingsController
         
         if ($account === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         // Verify current password
         if (!verify_password($currentPassword, $account['password_hash'])) {
-            echo View::render('web/settings/index', [
+            return View::renderWithLayout('web/settings/index', [
                 'account' => $account,
                 'error' => 'Current password is incorrect',
             ]);
-            return;
         }
 
         // Validate new password
         if (strlen($newPassword) < 8) {
-            echo View::render('web/settings/index', [
+            return View::renderWithLayout('web/settings/index', [
                 'account' => $account,
                 'error' => 'Password must be at least 8 characters',
             ]);
-            return;
         }
 
         // Confirm passwords match
         if ($newPassword !== $confirmPassword) {
-            echo View::render('web/settings/index', [
+            return View::renderWithLayout('web/settings/index', [
                 'account' => $account,
                 'error' => 'Passwords do not match',
             ]);
-            return;
         }
 
         // Update password
@@ -193,6 +189,7 @@ final class SettingsController
         ]);
 
         Response::redirect(url('/settings'));
+        return '';
     }
 
     /**
@@ -200,23 +197,23 @@ final class SettingsController
      * 
      * GET /settings/export
      */
-    public function export(Request $request): void
+    public function export(Request $request): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $account = Account::find((int) $accountId);
         
         if ($account === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
-        echo View::render('web/settings/export', [
+        return View::renderWithLayout('web/settings/export', [
             'account' => $account,
         ]);
     }
@@ -236,23 +233,23 @@ final class SettingsController
      * 
      * GET /settings/account
      */
-    public function account(Request $request): void
+    public function account(Request $request): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $account = Account::find((int) $accountId);
         
         if ($account === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
-        echo View::render('web/settings/account', [
+        return View::renderWithLayout('web/settings/account', [
             'account' => $account,
         ]);
     }
@@ -262,23 +259,23 @@ final class SettingsController
      * 
      * GET /settings/privacy
      */
-    public function privacy(Request $request): void
+    public function privacy(Request $request): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $account = Account::find((int) $accountId);
         
         if ($account === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
-        echo View::render('web/settings/privacy', [
+        return View::renderWithLayout('web/settings/privacy', [
             'account' => $account,
         ]);
     }
@@ -288,23 +285,23 @@ final class SettingsController
      * 
      * GET /settings/notifications
      */
-    public function notifications(Request $request): void
+    public function notifications(Request $request): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $account = Account::find((int) $accountId);
         
         if ($account === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
-        echo View::render('web/settings/notifications', [
+        return View::renderWithLayout('web/settings/notifications', [
             'account' => $account,
         ]);
     }
@@ -314,13 +311,13 @@ final class SettingsController
      * 
      * POST /settings/account
      */
-    public function updateAccount(Request $request): void
+    public function updateAccount(Request $request): string
     {
         $accountId = Session::get('account_id');
         
         if ($accountId === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         $data = $request->json();
@@ -334,32 +331,29 @@ final class SettingsController
         
         if ($account === null) {
             Response::redirect(url('/login'));
-            return;
+            return '';
         }
 
         if (!empty($newPassword)) {
             if (!verify_password($currentPassword, $account['password_hash'])) {
-                echo View::render('web/settings/account', [
+                return View::renderWithLayout('web/settings/account', [
                     'account' => $account,
                     'error' => 'Current password is incorrect',
                 ]);
-                return;
             }
 
             if (strlen($newPassword) < 8) {
-                echo View::render('web/settings/account', [
+                return View::renderWithLayout('web/settings/account', [
                     'account' => $account,
                     'error' => 'Password must be at least 8 characters',
                 ]);
-                return;
             }
 
             if ($newPassword !== $confirmPassword) {
-                echo View::render('web/settings/account', [
+                return View::renderWithLayout('web/settings/account', [
                     'account' => $account,
                     'error' => 'Passwords do not match',
                 ]);
-                return;
             }
 
             Account::update((int) $accountId, [
@@ -376,6 +370,7 @@ final class SettingsController
         }
 
         Response::redirect(url('/settings/account'));
+        return '';
     }
 
     /**

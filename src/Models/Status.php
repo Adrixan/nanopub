@@ -233,8 +233,8 @@ final class Status
         }
 
         $sql = sprintf(
-            'INSERT INTO statuses (%s) VALUES (%s)',
-            implode(', ', $fields),
+            'INSERT INTO statuses (`%s`) VALUES (%s)',
+            implode('`, `', $fields),
             implode(', ', $placeholders)
         );
 
@@ -274,7 +274,7 @@ final class Status
 
         foreach ($allowedFields as $field) {
             if (isset($data[$field])) {
-                $sets[] = "{$field} = ?";
+                $sets[] = "`{$field}` = ?";
                 $values[] = $data[$field];
             }
         }

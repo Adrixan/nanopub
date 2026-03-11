@@ -62,7 +62,7 @@ final class HomeController
             'peer_count' => 0,
         ];
 
-        return View::render('web/home/landing', [
+        return View::renderWithLayout('web/home/landing', [
             'instance' => $fallbackInstance,
         ]);
     }
@@ -99,7 +99,7 @@ final class HomeController
             return $this->showTimelineError('Unable to load your timeline. The database may be temporarily unavailable.');
         }
 
-        return View::render('web/home/timeline', [
+        return View::renderWithLayout('web/home/timeline', [
             'account' => $account,
             'statuses' => $statuses,
         ]);
@@ -112,7 +112,7 @@ final class HomeController
      */
     private function showTimelineError(string $message): string
     {
-        return View::render('error/500', [
+        return View::renderWithLayout('error/500', [
             'message' => $message,
         ]);
     }
@@ -127,12 +127,12 @@ final class HomeController
         try {
             $statuses = iterator_to_array(Status::getPublicTimeline(20));
         } catch (RuntimeException $e) {
-            return View::render('error/500', [
+            return View::renderWithLayout('error/500', [
                 'message' => 'Unable to load the public timeline. The database may be temporarily unavailable.',
             ]);
         }
 
-        return View::render('web/home/public', [
+        return View::renderWithLayout('web/home/public', [
             'statuses' => $statuses,
         ]);
     }
@@ -155,7 +155,7 @@ final class HomeController
             'description' => 'A federated social network powered by NanoPub',
         ];
 
-        return View::render('web/home/about', [
+        return View::renderWithLayout('web/home/about', [
             'instance' => $fallbackInstance,
         ]);
     }

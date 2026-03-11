@@ -21,7 +21,7 @@ final class View
     /**
      * Default layout name.
      */
-    private static string $defaultLayout = 'layouts/main';
+    private static string $defaultLayout = 'layouts/default';
 
     /**
      * Shared data available to all views.

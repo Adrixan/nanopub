@@ -44,7 +44,7 @@ final class NotificationController
 
         Notification::markAllAsRead((int) $accountId);
 
-        return View::render('web/notifications/index', [
+        return View::renderWithLayout('web/notifications/index', [
             'account' => $account,
             'notifications' => $notifications,
             'activeNav' => 'notifications',

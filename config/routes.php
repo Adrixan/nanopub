@@ -36,6 +36,7 @@ $routes = [
         // Notifications & Bookmarks
         '/notifications' => [\NanoPub\Controllers\Web\NotificationController::class, 'index'],
         '/bookmarks' => [\NanoPub\Controllers\Web\BookmarkController::class, 'index'],
+        '/explore' => [\NanoPub\Controllers\Web\ExploreController::class, 'index'],
         
         // Settings
         '/settings' => [\NanoPub\Controllers\Web\SettingsController::class, 'index'],

@@ -36,7 +36,7 @@ final class AuthController
             return '';
         }
 
-        return View::render('web/auth/login');
+        return View::renderWithLayout('web/auth/login');
     }
 
     /**
@@ -55,7 +55,7 @@ final class AuthController
             Response::redirect(url('/'));
             return '';
         } catch (AuthenticationException $e) {
-            return View::render('web/auth/login', [
+            return View::renderWithLayout('web/auth/login', [
                 'error' => $e->getMessage(),
                 'login' => $login,
             ]);
@@ -74,7 +74,7 @@ final class AuthController
             return '';
         }
 
-        return View::render('web/auth/register');
+        return View::renderWithLayout('web/auth/register');
     }
 
     /**
@@ -93,7 +93,7 @@ final class AuthController
             Response::redirect(url('/'));
             return '';
         } catch (ValidationException $e) {
-            return View::render('web/auth/register', [
+            return View::renderWithLayout('web/auth/register', [
                 'errors' => $e->getErrors(),
                 'error' => $e->getMessage(),
                 'input' => $input,

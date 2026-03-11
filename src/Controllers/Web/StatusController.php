@@ -38,7 +38,7 @@ final class StatusController
      * 
      * GET /@{username}/{statusId}
      */
-    public function show(Request $request, string $username, int $statusId): void
+    public function show(Request $request, string $username, int $statusId): string
     {
         $account = Account::findByUsername($username);
         
@@ -55,7 +55,7 @@ final class StatusController
         $context = Status::getContext($statusId);
         $currentAccount = $this->getCurrentAccount();
 
-        echo View::render('web/statuses/show', [
+        return View::renderWithLayout('web/statuses/show', [
             'status' => $status,
             'account' => $account,
             'context' => $context,
